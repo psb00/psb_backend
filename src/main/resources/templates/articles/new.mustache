@@ -1,9 +1,9 @@
 {{>layouts/header}}
 <body>
     <form action="/articles/create" method="post">
-        <input type="text">
-        <textarea></textarea>
+        <input type="text" name="title">
+        <textarea name="content"></textarea>
         <button type="submit">Submit</button>
     </form>
 </body>
-{{>layouts/footers}}
+{{>layouts/footer}}
