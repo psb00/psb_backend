@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -38,7 +39,7 @@ public class ArticleController {
         Article saved = articleRepository.save(article);
         //System.out.println(saved.toString());
         log.info(saved.toString());
-        return "";
+        return "redirect:/articles/" + saved.getId();
     }
 
     @GetMapping("/articles/{id}")  // @PathVariable은 url 요청으로 온 전달값의 컨트롤러의 매개변수로 가져오는 어노테이션이다.
@@ -52,6 +53,45 @@ public class ArticleController {
 
         // 3. 뷰 페이지 반환하기
         return "articles/show";
+    }
+
+    @GetMapping("/articles")
+    public String index(Model model){ //리파지토리에서 가져온 list를 모델에 등록해야함
+        //1.모든 데이터 가져오기
+        List<Article> articleEntityList = (List<Article>) articleRepository.findAll(); //여기서 List<Article>은 다운캐스팅 한 것임.
+        //2.모델에 데이터 등록하기
+        model.addAttribute("articleList",articleEntityList);
+        //3. 뷰 페이지 설정하기
+
+        return "articles/index";
+
+    }
+
+    @GetMapping("/articles/{id}/edit")
+    public String edit(@PathVariable Long id ,Model model){
+
+        Article articleEntity = articleRepository.findById(id).orElse(null);
+
+        model.addAttribute("article", articleEntity);
+
+
+        return "articles/edit";
+    }
+    @PostMapping("/articles/update")
+    public String update(ArticleForm form){
+
+        Article articleEntity = form.toEntity();
+
+        log.info(articleEntity.toString());
+
+        Article target = articleRepository.findById(articleEntity.getId()).orElse(null);
+
+        if(target != null){
+            articleRepository.save(articleEntity);
+        }
+
+
+        return "redirect:/articles/" + articleEntity.getId();
     }
 
 

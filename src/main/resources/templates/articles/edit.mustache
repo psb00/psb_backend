@@ -1,0 +1,16 @@
+{{>layouts/header}}
+
+<body>
+<form action="/articles/update" method="post">
+    <input name="id" type="hidden" value="{{id}}"> <!--수정폼에서 서버로 보낼 데이터인 것을 표시-->
+    <input type="text" name="title">
+    <textarea name="content"></textarea>
+    <button type="submit">Submit</button>
+    <a href="/articles/{{article.id}}">상세페이지로</a>
+
+</form>
+
+</body>
+
+
+{{>layouts/footer}}
