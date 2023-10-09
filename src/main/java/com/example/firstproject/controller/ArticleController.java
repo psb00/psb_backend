@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -93,6 +94,19 @@ public class ArticleController {
 
         return "redirect:/articles/" + articleEntity.getId();
     }
+    @GetMapping("/articles/{id}/delete") //http는 get과 post밖에 지원 안함. 원래대로면 DeleteMapping써도 됨
+    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes){
+        Article target = articleRepository.findById(id).orElse(null);
+
+        if(target != null){
+            articleRepository.delete(target);
+            redirectAttributes.addFlashAttribute("msg","삭제됐습니다!");
+        }
+
+
+        return "redirect:/articles";
+    }
+
 
 
 }
